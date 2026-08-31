@@ -1,0 +1,25 @@
+# Java / Spring Boot
+server/target/
+server/.mvn/
+server/*.jar
+server/*.war
+server/.classpath
+server/.project
+server/.settings/
+server/bin/
+
+# Node / Angular
+client/node_modules/
+client/dist/
+client/.angular/cache/
+client/npm-debug.log
+
+# IDEs & System
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# Secrets
+*.env
+application-local.properties
