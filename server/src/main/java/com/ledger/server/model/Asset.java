@@ -42,7 +42,7 @@ public class Asset {
     private LocalDate purchaseDate;
 
     @Column(name = "created_at", insertable = false, updatable = false)
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @OneToOne(mappedBy = "asset", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Warranty warranty;
