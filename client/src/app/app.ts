@@ -16,7 +16,7 @@ export class App implements OnInit {
   private assetService = inject(AssetService);
 
   assets = signal<Asset[]>([]);
-  error = signal<string | null>(null);
+  errorMessage = signal<string | null>(null);
 
   newAsset: Asset = {
     name: '',
