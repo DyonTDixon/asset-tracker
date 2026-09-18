@@ -1,0 +1,52 @@
+<main style="padding: 24px; font-family: sans-serif; max-width: 800px; margin: 0 auto;">
+  <h1>Warranty & Asset Tracker</h1>
+
+  @if (errorMessage()) {
+    <div style="padding: 12px; background: #fee2e2; color: #b91c1c; border-radius: 6px; margin-bottom: 16px;">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <section style="margin-bottom: 24px; padding: 16px; border: 1px solid #e5e7eb; border-radius: 8px;">
+    <h3>Add Quick Asset</h3>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <input [(ngModel)]="newAsset.name" placeholder="Item Name (e.g. MacBook)" style="padding: 8px;" />
+      <input [(ngModel)]="newAsset.brand" placeholder="Brand (e.g. Apple)" style="padding: 8px;" />
+      <input [(ngModel)]="newAsset.model" placeholder="Model" style="padding: 8px;" />
+      <input [(ngModel)]="newAsset.purchasePrice" type="number" placeholder="Price" style="padding: 8px;" />
+      <button (click)="addAsset()" style="padding: 8px 16px; background: #2563eb; color: white; border: none; border-radius: 4px; cursor: pointer;">
+        Save to DB
+      </button>
+    </div>
+  </section>
+
+  <section>
+    <h3>Asset Ledger ({{ assets().length }})</h3>
+    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+      <thead>
+        <tr style="border-bottom: 2px solid #e5e7eb;">
+          <th style="padding: 8px;">ID</th>
+          <th style="padding: 8px;">Name</th>
+          <th style="padding: 8px;">Brand</th>
+          <th style="padding: 8px;">Model</th>
+          <th style="padding: 8px;">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of assets(); track item.id) {
+          <tr style="border-bottom: 1px solid #f3f4f6;">
+            <td style="padding: 8px;">{{ item.id }}</td>
+            <td style="padding: 8px;">{{ item.name }}</td>
+            <td style="padding: 8px;">{{ item.brand }}</td>
+            <td style="padding: 8px;">{{ item.model }}</td>
+            <td style="padding: 8px;">${{ item.purchasePrice }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" style="padding: 16px; text-align: center; color: #6b7280;">No assets registered yet.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </section>
+</main>
