@@ -1,0 +1,294 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #1e293b;
+}
+
+.login-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+/* Left Form Section */
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 48px;
+  background-color: #ffffff;
+}
+
+.form-wrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
+.logo-pill {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ede9fe;
+  color: #6366f1;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  color: #0f172a;
+}
+
+.header p {
+  margin: 0 0 24px 0;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.header a {
+  color: #4f46e5;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.field-group {
+  margin-bottom: 16px;
+}
+
+.field-group label {
+  display: block;
+  font-size: 0.825rem;
+  font-weight: 500;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+.field-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.field-group input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.field-group input.invalid {
+  border-color: #ef4444;
+}
+
+.options-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.825rem;
+  margin-bottom: 20px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.forgot-link {
+  color: #4f46e5;
+  text-decoration: none;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 12px;
+  background-color: #4f46e5;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-submit:hover {
+  background-color: #4338ca;
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  color: #94a3b8;
+  font-size: 0.75rem;
+}
+
+.divider::before, .divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: #f1f5f9;
+}
+
+.divider span {
+  padding: 0 12px;
+}
+
+.social-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  font-weight: 500;
+  color: #1e293b;
+  cursor: pointer;
+}
+
+.footer-note {
+  margin-top: 28px;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  text-align: center;
+}
+
+/* Right Panel: Graphic rings + Hero text */
+.hero-panel {
+  background-color: #0b1120;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 64px 48px;
+}
+
+.rings-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 40px;
+  opacity: 0.85;
+}
+
+.ring-wrapper svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.ring-bg {
+  fill: none;
+  stroke: #1e293b;
+  stroke-width: 14;
+}
+
+.ring-stroke {
+  fill: none;
+  stroke-width: 14;
+  stroke-linecap: round;
+  stroke-dasharray: 251.2;
+}
+
+/* Color variations matching the Figma screenshot */
+.ring-style-1 .ring-stroke { stroke: #6366f1; stroke-dashoffset: 80; }
+.ring-style-2 .ring-stroke { stroke: #10b981; stroke-dashoffset: 140; }
+.ring-style-3 .ring-stroke { stroke: #f59e0b; stroke-dashoffset: 170; }
+.ring-style-4 .ring-stroke { stroke: #38bdf8; stroke-dashoffset: 50; }
+.ring-style-5 .ring-stroke { stroke: #a855f7; stroke-dashoffset: 110; }
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  color: #ffffff;
+  max-width: 480px;
+  background: linear-gradient(180deg, rgba(11,17,32,0) 0%, rgba(11,17,32,0.92) 20%);
+  padding-top: 24px;
+}
+
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(30, 41, 59, 0.7);
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.badge-icon {
+  background-color: #4f46e5;
+  color: #ffffff;
+  border-radius: 4px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.badge-text {
+  font-size: 0.825rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.hero-content h2 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 12px 0;
+}
+
+.hero-content p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #94a3b8;
+  margin: 0;
+}
+
+/* Responsive adjustment */
+@media (max-width: 900px) {
+  .login-layout {
+    grid-template-columns: 1fr;
+  }
+  .hero-panel {
+    display: none;
+  }
+}
