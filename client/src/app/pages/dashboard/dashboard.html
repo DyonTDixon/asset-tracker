@@ -1,0 +1,202 @@
+<div class="app-layout">
+  <!-- Left Navigation Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="logo-pill">L</span>
+      <span class="brand-title">Ledger</span>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-label">OVERVIEW</span>
+      <a class="nav-item active"><i class="icon">■</i> Dashboard</a>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-label">LIBRARY</span>
+      <a class="nav-item"><i class="icon">▤</i> All Assets</a>
+      <a class="nav-item"><i class="icon">◷</i> Warranties</a>
+      <a class="nav-item"><i class="icon">🗎</i> Document Vault</a>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-label">TOOLS</span>
+      <div class="nav-item disabled">
+        <span>Claims & Auto</span>
+        <span class="badge-soon">SOON</span>
+      </div>
+      <div class="nav-item disabled">
+        <span>Resale Estimator</span>
+        <span class="badge-soon">SOON</span>
+      </div>
+    </div>
+
+    <div class="user-profile">
+      <div class="avatar">JD</div>
+      <div class="user-details">
+        <strong>Jane Doe</strong>
+        <span>jane@ledger.app</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Workspace -->
+  <div class="main-content">
+    <!-- Top Action Bar -->
+    <header class="top-header">
+      <div>
+        <h1>Hello, Jane 👋</h1>
+        <p class="subtitle">Here's what's covered — and what isn't — today.</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn-icon">⚙</button>
+        <button class="btn-icon">?</button>
+        <div class="profile-thumb">👤</div>
+        <button class="btn-primary">+ Add Asset</button>
+      </div>
+    </header>
+
+    <!-- KPI Metric Summary Row -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon-wrapper icon-blue">🗎</div>
+        <span class="kpi-label">Total Logged Assets</span>
+        <strong class="kpi-value">{{ totalLoggedAssets() }}</strong>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon-wrapper icon-purple">$</div>
+        <span class="kpi-label">Total Financial Value</span>
+        <strong class="kpi-value">${{ totalFinancialValue() | number }}</strong>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon-wrapper icon-green">✓</div>
+        <span class="kpi-label">Active Warranties</span>
+        <strong class="kpi-value">{{ activeWarranties() }}</strong>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon-wrapper icon-amber">!</div>
+        <span class="kpi-label">Expiring Soon</span>
+        <strong class="kpi-value">{{ expiringSoonCount() }}</strong>
+      </div>
+    </section>
+
+    <!-- Workspace Grid: Assets Feed vs Right Rail -->
+    <div class="workspace-grid">
+      <!-- Left Feed: Assets & Filter Bar -->
+      <section class="feed-section">
+        <div class="feed-header">
+          <h2>Your assets</h2>
+          <div class="search-box">
+            <input 
+              type="text" 
+              placeholder="Search name, brand, or serial" 
+              [ngModel]="searchQuery()" 
+              (ngModelChange)="searchQuery.set($event)" 
+            />
+            <select class="category-dropdown">
+              <option>All Categories</option>
+              <option>Electronics</option>
+              <option>Appliances</option>
+              <option>Fitness</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="filter-pills">
+          @for (pill of filterPills; track pill) {
+            <button 
+              [class.active]="selectedFilter() === pill" 
+              (click)="setFilter(pill)">
+              {{ pill }}
+            </button>
+          }
+        </div>
+
+        <!-- Categorized Asset Cards -->
+        @for (group of categories(); track group.name) {
+          <div class="category-group">
+            <div class="category-group-header">
+              <span class="dot"></span>
+              <strong>{{ group.name | uppercase }}</strong>
+              <span class="count">{{ group.items.length }} items</span>
+            </div>
+
+            <div class="asset-cards-grid">
+              @for (item of group.items; track item.id) {
+                <div class="asset-card">
+                  <div class="card-top">
+                    <div class="device-thumb">🎧</div>
+                    @if (item.activationDeadline) {
+                      <span class="tag tag-deadline">Activate by {{ item.activationDeadline }}</span>
+                    } @else if (item.status === 'Lifetime') {
+                      <span class="tag tag-lifetime">Lifetime</span>
+                    } @else if (item.status === 'Expiring Soon') {
+                      <span class="tag tag-expiring">{{ item.daysRemaining }}d left</span>
+                    } @else {
+                      <span class="tag tag-active">Active</span>
+                    }
+                  </div>
+
+                  <strong class="card-title">{{ item.name }}</strong>
+                  <span class="card-subtitle">{{ item.categoryName }} · {{ item.serialNumber }}</span>
+                  <div class="card-price">${{ item.purchasePrice }}</div>
+
+                  @if (item.status === 'Lifetime') {
+                    <span class="warranty-status-text">No expiration — covered for life</span>
+                  } @else {
+                    <div class="progress-container">
+                      <div class="progress-bar" [style.width.%]="(item.daysRemaining! / 365) * 100"></div>
+                    </div>
+                    <span class="warranty-status-text">{{ item.daysRemaining }} days remaining</span>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </section>
+
+      <!-- Right Rail: Expiring & Breakdown -->
+      <aside class="right-rail">
+        <!-- Expiring Soon Widget -->
+        <div class="rail-card">
+          <h3>Expiring soon</h3>
+          <div class="expiring-list">
+            @for (exp of expiringAssets(); track exp.id) {
+              <div class="expiring-item">
+                <div class="thumb">🚴</div>
+                <div class="exp-details">
+                  <strong>{{ exp.name }}</strong>
+                  <span>{{ exp.categoryName }}</span>
+                </div>
+                <span class="days-pill">{{ exp.daysRemaining }}d</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- By Category Breakdown Widget -->
+        <div class="rail-card">
+          <h3>By category</h3>
+          <div class="category-bars">
+            <div class="bar-row">
+              <div class="bar-meta"><span>Electronics</span><strong>2</strong></div>
+              <div class="bar-track"><div class="bar-fill blue" style="width: 35%;"></div></div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-meta"><span>Appliances</span><strong>2</strong></div>
+              <div class="bar-track"><div class="bar-fill amber" style="width: 25%;"></div></div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-meta"><span>Fitness</span><strong>2</strong></div>
+              <div class="bar-track"><div class="bar-fill teal" style="width: 25%;"></div></div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-meta"><span>Tools</span><strong>2</strong></div>
+              <div class="bar-track"><div class="bar-fill slate" style="width: 15%;"></div></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
