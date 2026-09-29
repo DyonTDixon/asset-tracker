@@ -1,5 +1,6 @@
 package com.ledger.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -15,6 +16,9 @@ public class Asset {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Never exposed over the API: avoids leaking passwordHash and serializing a lazy proxy.
+    // The owner is assigned server-side (see AssetController).
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

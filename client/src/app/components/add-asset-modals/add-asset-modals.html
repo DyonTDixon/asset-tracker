@@ -1,0 +1,165 @@
+<!-- Backdrop Dimmer with Blur -->
+<div class="modal-backdrop" (click)="dismiss()">
+  <!-- Modal Card (Stops click propagation so clicking inside doesn't close) -->
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <!-- Modal Header -->
+    <header class="modal-header">
+      <h2>Add Asset</h2>
+      <button type="button" class="btn-close" (click)="dismiss()">✕</button>
+    </header>
+
+    <form [formGroup]="assetForm" (ngSubmit)="save()" class="modal-body">
+      <!-- CORE INFO SECTION -->
+      <section class="form-section">
+        <span class="section-label">CORE INFO</span>
+
+        <div class="form-row">
+          <div class="field-col">
+            <label>Item Name</label>
+            <input formControlName="name" placeholder="e.g. Sony WH-1000XM5" />
+          </div>
+          <div class="field-col">
+            <label>Brand / Manufacturer</label>
+            <input formControlName="brand" placeholder="e.g. Sony" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field-col">
+            <label>Model</label>
+            <input formControlName="model" placeholder="e.g. WH-1000XM5" />
+          </div>
+          <div class="field-col">
+            <label>Serial Number</label>
+            <input formControlName="serialNumber" placeholder="e.g. SN-48213-X" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field-col">
+            <label>Category</label>
+            <select formControlName="categoryName">
+              <option value="Electronics">Electronics</option>
+              <option value="Appliances">Appliances</option>
+              <option value="Fitness">Fitness</option>
+              <option value="Tools">Tools</option>
+            </select>
+          </div>
+          <div class="field-col">
+            <label>Purchase Price ($)</label>
+            <input type="number" formControlName="purchasePrice" placeholder="0.00" step="0.01" />
+          </div>
+        </div>
+
+        <div class="form-row single-col">
+          <div class="field-col half-width">
+            <label>Purchase Date</label>
+            <input type="date" formControlName="purchaseDate" />
+          </div>
+        </div>
+      </section>
+
+      <!-- WARRANTY SECTION -->
+      <section class="form-section">
+        <span class="section-label">WARRANTY</span>
+
+        <!-- Warranty Type Pill Switcher -->
+        <div class="pill-selector">
+          <button
+            type="button"
+            class="pill-opt"
+            [class.active]="selectedWarrantyType() === 'Manufacturer'"
+            (click)="setWarrantyType('Manufacturer')"
+          >
+            <span class="radio-dot"></span> Manufacturer
+          </button>
+          <button
+            type="button"
+            class="pill-opt"
+            [class.active]="selectedWarrantyType() === 'Extended'"
+            (click)="setWarrantyType('Extended')"
+          >
+            <span class="radio-dot"></span> Extended / 3rd Party
+          </button>
+          <button
+            type="button"
+            class="pill-opt"
+            [class.active]="selectedWarrantyType() === 'Lifetime'"
+            (click)="setWarrantyType('Lifetime')"
+          >
+            <span class="radio-dot"></span> Lifetime
+          </button>
+        </div>
+
+        <div class="form-row">
+          <div class="field-col">
+            <label>Warranty Duration (Months)</label>
+            <input
+              type="number"
+              formControlName="warrantyDuration"
+              placeholder="e.g. 12"
+            />
+          </div>
+          <div class="field-col">
+            <label>— or explicit Expiration Date</label>
+            <input
+              type="date"
+              formControlName="expirationDate"
+            />
+          </div>
+        </div>
+
+        <div class="checkbox-row">
+          <label class="custom-check">
+            <input type="checkbox" formControlName="requiresActivation" />
+            <span>Requires manual activation deadline</span>
+          </label>
+        </div>
+
+        @if (assetForm.get('requiresActivation')?.value) {
+          <div class="form-row single-col">
+            <div class="field-col half-width">
+              <label>Activation Deadline</label>
+              <input type="date" formControlName="activationDeadline" />
+            </div>
+          </div>
+        }
+      </section>
+
+      <!-- RECEIPT & DOCUMENTS SECTION -->
+      <section class="form-section">
+        <span class="section-label">RECEIPT & DOCUMENTS</span>
+        <div class="dropzone" (click)="fileInput.click()">
+          <input
+            #fileInput
+            type="file"
+            (change)="onFileSelected($event)"
+            style="display: none"
+            accept=".pdf,.png,.jpg,.jpeg"
+          />
+          <div class="drop-icon">📤</div>
+          <p class="drop-main">
+            @if (selectedFileName()) {
+              <strong>{{ selectedFileName() }}</strong>
+            } @else {
+              Drag & drop a receipt or manual here, or <span>click to browse</span>
+            }
+          </p>
+          <span class="drop-sub">JPG, PNG, or PDF</span>
+        </div>
+      </section>
+
+      <!-- Modal Footer -->
+      <footer class="modal-footer">
+        <button type="button" class="btn-secondary" (click)="dismiss()">Cancel</button>
+        <button type="submit" class="btn-submit" [disabled]="isSubmitting()">
+          @if (isSubmitting()) {
+            Saving...
+          } @else {
+            Save Asset
+          }
+        </button>
+      </footer>
+    </form>
+  </div>
+</div>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AssetService } from '../../services/asset.service';
 import { Asset } from '../../models/asset.models';
+import { AddAssetModalComponent } from '../../components/add-asset-modals/add-asset-modals';
 
 export interface DashboardAsset extends Asset {
   categoryName?: string;
@@ -14,7 +15,7 @@ export interface DashboardAsset extends Asset {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AddAssetModalComponent],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
@@ -95,6 +96,22 @@ export class DashboardComponent implements OnInit {
       daysRemaining: 18
     }
   ]);
+
+  // Add a signal to control modal visibility
+  isAddModalOpen = signal(false);
+
+  // Methods to open/close/add
+  openAddModal(): void {
+    this.isAddModalOpen.set(true);
+  }
+
+  closeAddModal(): void {
+    this.isAddModalOpen.set(false);
+  }
+
+  onAssetCreated(newAsset: DashboardAsset): void {
+    this.assets.update(prev => [newAsset, ...prev]);
+  } 
 
   // Dynamic KPI calculations
   totalLoggedAssets = computed(() => this.assets().length);

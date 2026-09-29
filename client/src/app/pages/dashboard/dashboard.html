@@ -51,7 +51,7 @@
         <button class="btn-icon">⚙</button>
         <button class="btn-icon">?</button>
         <div class="profile-thumb">👤</div>
-        <button class="btn-primary">+ Add Asset</button>
+        <button class="btn-primary" (click)="openAddModal()">+ Add Asset</button>
       </div>
     </header>
 
@@ -200,3 +200,10 @@
     </div>
   </div>
 </div>
+
+@if (isAddModalOpen()) {
+  <app-add-asset-modal 
+    (close)="closeAddModal()" 
+    (assetCreated)="onAssetCreated($event)">
+  </app-add-asset-modal>
+}

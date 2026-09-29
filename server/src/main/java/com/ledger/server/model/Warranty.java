@@ -1,5 +1,6 @@
 package com.ledger.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -12,6 +13,8 @@ public class Warranty {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Ignored in JSON to break the Asset <-> Warranty cycle; Asset.setWarranty() wires it up.
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "asset_id", nullable = false, unique = true)
     private Asset asset;
