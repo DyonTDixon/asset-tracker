@@ -1,0 +1,333 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 24px;
+}
+
+.modal-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  border-radius: 20px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-header {
+  padding: 24px 28px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.btn-close {
+  background: #f1f5f9;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-body {
+  padding: 0 28px 24px;
+  overflow-y: auto;
+}
+
+/* Page 1: Detail Grid Layout */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 32px;
+}
+
+.spec-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f8fafc;
+}
+
+.spec-label {
+  color: #64748b;
+}
+
+.spec-val {
+  font-weight: 500;
+  color: #0f172a;
+}
+
+.spec-val.price {
+  font-weight: 700;
+}
+
+/* Right Rail: Countdown Circle */
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.countdown-widget {
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+}
+
+.ring-circle {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 8px;
+}
+
+.ring-circle svg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.circle-bg {
+  fill: none;
+  stroke: #e2e8f0;
+  stroke-width: 10;
+}
+
+.circle-stroke {
+  fill: none;
+  stroke: #10b981;
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 264;
+  stroke-dashoffset: 75;
+}
+
+.ring-inner-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.days-count {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1;
+}
+
+.days-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+
+.expiry-sub {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Receipt File Card */
+.receipt-box {
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.receipt-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  margin-bottom: 8px;
+}
+
+.file-size {
+  color: #94a3b8;
+}
+
+.receipt-preview {
+  height: 60px;
+  background: #ede9fe;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.btn-open-receipt {
+  width: 100%;
+  padding: 8px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Page 2: Edit Form Layout */
+.form-section { margin-bottom: 20px; }
+.section-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #4f46e5;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.form-row.single-col { grid-template-columns: 1fr; }
+.field-col.half-width { width: calc(50% - 8px); }
+.field-col label {
+  display: block;
+  font-size: 0.775rem;
+  font-weight: 500;
+  color: #475569;
+  margin-bottom: 6px;
+}
+.field-col input, .field-col select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 9px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  outline: none;
+}
+.pill-selector { display: flex; gap: 10px; margin-bottom: 16px; }
+.pill-opt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  color: #64748b;
+  cursor: pointer;
+}
+.pill-opt.active {
+  border-color: #4f46e5;
+  background: #eff6ff;
+  color: #4f46e5;
+}
+.radio-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+}
+.pill-opt.active .radio-dot {
+  border-color: #4f46e5;
+  background: #4f46e5;
+}
+.checkbox-row { margin-top: 8px; font-size: 0.8rem; color: #475569; }
+.custom-check { display: inline-flex; align-items: center; gap: 8px; }
+.dropzone {
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+  background: #f8fafc;
+}
+.drop-main { font-size: 0.825rem; margin: 0 0 4px; color: #64748b; }
+.drop-main span { color: #4f46e5; }
+.drop-sub { font-size: 0.7rem; color: #94a3b8; }
+
+/* Footers */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 12px;
+}
+.modal-footer.split {
+  justify-content: space-between;
+}
+.btn-delete {
+  padding: 8px 16px;
+  background: #fef2f2;
+  color: #ef4444;
+  border: 1px solid #fee2e2;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-edit {
+  padding: 8px 16px;
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-secondary {
+  padding: 9px 18px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.btn-save {
+  padding: 9px 20px;
+  background: #3b82f6;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}

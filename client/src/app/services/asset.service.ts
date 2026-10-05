@@ -6,6 +6,7 @@ import { Asset } from '../models/asset.models';
 @Injectable({
   providedIn: 'root'
 })
+
 export class AssetService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:8080/api/v1/assets';
@@ -16,5 +17,13 @@ export class AssetService {
 
   createAsset(asset: Asset): Observable<Asset> {
     return this.http.post<Asset>(this.apiUrl, asset);
+  }
+
+  updateAsset(id: number, asset: Asset): Observable<Asset> {
+    return this.http.put<Asset>(`${this.apiUrl}/${id}`, asset);
+  }
+
+  deleteAsset(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

@@ -1,0 +1,207 @@
+<div class="modal-backdrop" (click)="dismiss()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+
+    <!-- ================= PAGE 1: VIEW DETAILS ================= -->
+    @if (!isEditMode()) {
+      <header class="modal-header">
+        <h2>{{ asset.name }}</h2>
+        <button type="button" class="btn-close" (click)="dismiss()">✕</button>
+      </header>
+
+      <div class="modal-body detail-grid">
+        <!-- Left: Metadata Spec Table -->
+        <div class="spec-list">
+          <div class="spec-row">
+            <span class="spec-label">Brand</span>
+            <span class="spec-val">{{ asset.brand }}</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Model</span>
+            <span class="spec-val">{{ asset.model }}</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Serial Number</span>
+            <span class="spec-val">{{ asset.serialNumber || '—' }}</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Category</span>
+            <span class="spec-val">{{ asset.categoryName || 'Electronics' }}</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Purchase Price</span>
+            <span class="spec-val price">${{ asset.purchasePrice }}</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Purchase Date</span>
+            <span class="spec-val">{{ asset.purchaseDate || 'Apr 10, 2026' }}</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Warranty Type</span>
+            <span class="spec-val">Manufacturer</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Provider</span>
+            <span class="spec-val">—</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Activation Deadline</span>
+            <span class="spec-val">—</span>
+          </div>
+        </div>
+
+        <!-- Right: Countdown Ring & Receipt Box -->
+        <div class="side-panel">
+          <div class="countdown-widget">
+            <div class="ring-circle">
+              <svg viewBox="0 0 100 100">
+                <circle class="circle-bg" cx="50" cy="50" r="42" />
+                <circle class="circle-stroke" cx="50" cy="50" r="42" />
+              </svg>
+              <div class="ring-inner-text">
+                <span class="days-count">{{ asset.daysRemaining ?? 87 }}</span>
+                <span class="days-label">DAYS LEFT</span>
+              </div>
+            </div>
+            <p class="expiry-sub">Manufacturer · expires Nov 21, 2028</p>
+          </div>
+
+          <div class="receipt-box">
+            <div class="receipt-top">
+              <span>Receipt on file</span>
+              <span class="file-size">PDF · 214 KB</span>
+            </div>
+            <div class="receipt-preview">
+              <span class="doc-icon">📄</span>
+            </div>
+            <button type="button" class="btn-open-receipt">Open Receipt</button>
+          </div>
+        </div>
+      </div>
+
+      <footer class="modal-footer split">
+        <button type="button" class="btn-delete" (click)="onDelete()">Delete Asset</button>
+        <button type="button" class="btn-edit" (click)="switchToEdit()">Edit Asset</button>
+      </footer>
+    }
+
+    <!-- ================= PAGE 2: EDIT ASSET ================= -->
+    @if (isEditMode()) {
+      <header class="modal-header">
+        <h2>Edit Asset</h2>
+        <button type="button" class="btn-close" (click)="dismiss()">✕</button>
+      </header>
+
+      <form [formGroup]="editForm" (ngSubmit)="onSave()" class="modal-body form-body">
+        <!-- Core Info -->
+        <section class="form-section">
+          <span class="section-label">CORE INFO</span>
+          <div class="form-row">
+            <div class="field-col">
+              <label>Item Name</label>
+              <input formControlName="name" />
+            </div>
+            <div class="field-col">
+              <label>Brand / Manufacturer</label>
+              <input formControlName="brand" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field-col">
+              <label>Model</label>
+              <input formControlName="model" />
+            </div>
+            <div class="field-col">
+              <label>Serial Number</label>
+              <input formControlName="serialNumber" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field-col">
+              <label>Category</label>
+              <select formControlName="categoryName">
+                <option value="Electronics">Electronics</option>
+                <option value="Appliances">Appliances</option>
+                <option value="Fitness">Fitness</option>
+                <option value="Tools">Tools</option>
+              </select>
+            </div>
+            <div class="field-col">
+              <label>Purchase Price ($)</label>
+              <input type="number" formControlName="purchasePrice" />
+            </div>
+          </div>
+          <div class="form-row single-col">
+            <div class="field-col half-width">
+              <label>Purchase Date</label>
+              <input type="date" formControlName="purchaseDate" />
+            </div>
+          </div>
+        </section>
+
+        <!-- Warranty Section -->
+        <section class="form-section">
+          <span class="section-label">WARRANTY</span>
+          <div class="pill-selector">
+            <button 
+              type="button" 
+              class="pill-opt" 
+              [class.active]="selectedWarrantyType() === 'Manufacturer'"
+              (click)="setWarrantyType('Manufacturer')">
+              <span class="radio-dot"></span> Manufacturer
+            </button>
+            <button 
+              type="button" 
+              class="pill-opt" 
+              [class.active]="selectedWarrantyType() === 'Extended'"
+              (click)="setWarrantyType('Extended')">
+              <span class="radio-dot"></span> Extended / 3rd Party
+            </button>
+            <button 
+              type="button" 
+              class="pill-opt" 
+              [class.active]="selectedWarrantyType() === 'Lifetime'"
+              (click)="setWarrantyType('Lifetime')">
+              <span class="radio-dot"></span> Lifetime
+            </button>
+          </div>
+
+          <div class="form-row">
+            <div class="field-col">
+              <label>Warranty Duration (Months)</label>
+              <input type="number" formControlName="warrantyDuration" />
+            </div>
+            <div class="field-col">
+              <label>— or explicit Expiration Date</label>
+              <input type="date" formControlName="expirationDate" />
+            </div>
+          </div>
+
+          <div class="checkbox-row">
+            <label class="custom-check">
+              <input type="checkbox" formControlName="requiresActivation" />
+              <span>Requires manual activation deadline</span>
+            </label>
+          </div>
+        </section>
+
+        <!-- Documents Upload -->
+        <section class="form-section">
+          <span class="section-label">RECEIPT & DOCUMENTS</span>
+          <div class="dropzone">
+            <div class="drop-icon">📤</div>
+            <p class="drop-main">Drag & drop a receipt or manual here, or <span>click to browse</span></p>
+            <span class="drop-sub">JPG, PNG, or PDF</span>
+          </div>
+        </section>
+
+        <footer class="modal-footer">
+          <button type="button" class="btn-secondary" (click)="cancelEdit()">Cancel</button>
+          <button type="submit" class="btn-save" [disabled]="isSubmitting()">
+            @if (isSubmitting()) { Saving... } @else { Save Asset }
+          </button>
+        </footer>
+      </form>
+    }
+
+  </div>
+</div>

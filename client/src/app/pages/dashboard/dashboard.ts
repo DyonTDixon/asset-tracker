@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AssetService } from '../../services/asset.service';
 import { Asset } from '../../models/asset.models';
 import { AddAssetModalComponent } from '../../components/add-asset-modals/add-asset-modals';
+import { AssetDetailModalComponent } from '../../components/asset-detail-modal/asset-detail-modal';
 
 export interface DashboardAsset extends Asset {
   categoryName?: string;
@@ -15,10 +16,11 @@ export interface DashboardAsset extends Asset {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, AddAssetModalComponent],
+  imports: [CommonModule, FormsModule, AddAssetModalComponent, AssetDetailModalComponent],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
+
 export class DashboardComponent implements OnInit {
   private assetService = inject(AssetService);
 
@@ -111,7 +113,28 @@ export class DashboardComponent implements OnInit {
 
   onAssetCreated(newAsset: DashboardAsset): void {
     this.assets.update(prev => [newAsset, ...prev]);
-  } 
+  }
+
+  // Add a signal for tracking the selected asset
+  selectedAsset = signal<DashboardAsset | null>(null);
+
+  openDetailModal(item: DashboardAsset): void {
+    this.selectedAsset.set(item);
+  }
+
+  closeDetailModal(): void {
+    this.selectedAsset.set(null);
+  }
+
+  onAssetUpdated(updated: DashboardAsset): void {
+    this.assets.update(items =>
+      items.map(a => a.id === updated.id ? updated : a)
+    );
+  }
+
+  onAssetDeleted(id: number): void {
+    this.assets.update(items => items.filter(a => a.id !== id));
+  }
 
   // Dynamic KPI calculations
   totalLoggedAssets = computed(() => this.assets().length);
