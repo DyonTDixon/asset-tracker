@@ -22,7 +22,6 @@ public class AssetController {
 
     // Placeholder owner used until authentication is wired up (the login page is not connected yet).
     private static final String DEMO_USER_EMAIL = "demo@ledger.local";
-
     private final AssetRepository assetRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
@@ -99,5 +98,51 @@ public class AssetController {
 
     private boolean isBlank(String value) {
         return value == null || value.isBlank();
+    }
+
+
+    /**
+     * Updates an existing asset by its unique identifier.
+     *
+     * Queries the database for the asset matching the provided ID. If found,
+     * updates its core properties (name, brand, model, serial number, price,
+     * purchase date) and persists the changes.
+     *
+     * @param id the primary key of the asset to update
+     * @param updated the incoming Asset payload containing modified fields
+     * @return ResponseEntity with the updated Asset (HTTP 200 OK) if found,
+     *         or HTTP 404 Not Found if the asset does not exist
+     */
+    // PUT /api/v1/assets/{id}
+    @PutMapping("/{id}")
+    public ResponseEntity<Asset> updateAsset(@PathVariable Long id, @RequestBody Asset updated) {
+        return assetRepository.findById(id).map(existing -> {
+            existing.setName(updated.getName());
+            existing.setBrand(updated.getBrand());
+            existing.setModel(updated.getModel());
+            existing.setSerialNumber(updated.getSerialNumber());
+            existing.setPurchasePrice(updated.getPurchasePrice());
+            existing.setPurchaseDate(updated.getPurchaseDate());
+            return ResponseEntity.ok(assetRepository.save(existing));
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
+     * Deletes an asset by its unique identifier.
+     *
+     * Checks if the asset exists in the database before issuing a delete.
+     *
+     * @param id the primary key of the asset to delete
+     * @return ResponseEntity with HTTP 204 No Content if successfully deleted,
+     *         or HTTP 404 Not Found if the record does not exist
+     */
+    // DELETE /api/v1/assets/{id}
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAsset(@PathVariable Long id) {
+        if (assetRepository.existsById(id)) {
+            assetRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }
